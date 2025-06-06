@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.ShuiguoDao">
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        a.id as id
+        ,a.shuiguo_name as shuiguoName
+        ,a.shuiguo_photo as shuiguoPhoto
+        ,a.shuiguo_types as shuiguoTypes
+        ,a.shuiguo_kucun_number as shuiguoKucunNumber
+        ,a.shuiguo_old_money as shuiguoOldMoney
+        ,a.shuiguo_new_money as shuiguoNewMoney
+        ,a.shuiguo_clicknum as shuiguoClicknum
+        ,a.shangxia_types as shangxiaTypes
+        ,a.shuiguo_delete as shuiguoDelete
+        ,a.shuiguo_content as shuiguoContent
+        ,a.create_time as createTime
+    </sql>
+    <select id="selectListView" parameterType="map" resultType="com.entity.view.ShuiguoView" >
+        SELECT
+        <include refid="Base_Column_List" />
+
+--         级联表的字段
+
+        FROM shuiguo  a
+
+        <where>
+            <if test="params.ids != null">
+                and a.id in
+                <foreach item="item" index="index" collection="params.ids" open="(" separator="," close=")">
+                #{item}
+                </foreach>
+            </if>
+            <if test=" params.shuiguoName != '' and params.shuiguoName != null and params.shuiguoName != 'null' ">
+                and a.shuiguo_name like CONCAT('%',#{params.shuiguoName},'%')
+            </if>
+            <if test="params.shuiguoTypes != null and params.shuiguoTypes != ''">
+                and a.shuiguo_types = #{params.shuiguoTypes}
+            </if>
+            <if test="params.shuiguoKucunNumberStart != null and params.shuiguoKucunNumberStart != ''">
+                <![CDATA[  and a.shuiguo_kucun_number >= #{params.shuiguoKucunNumberStart}   ]]>
+            </if>
+            <if test="params.shuiguoKucunNumberEnd != null and params.shuiguoKucunNumberEnd != ''">
+                <![CDATA[  and a.shuiguo_kucun_number <= #{params.shuiguoKucunNumberEnd}   ]]>
+            </if>
+             <if test="params.shuiguoKucunNumber != null and params.shuiguoKucunNumber != ''">
+                and a.shuiguo_kucun_number = #{params.shuiguoKucunNumber}
+             </if>
+            <if test="params.shuiguoOldMoneyStart != null ">
+                <![CDATA[  and a.shuiguo_old_money >= #{params.shuiguoOldMoneyStart}   ]]>
+            </if>
+            <if test="params.shuiguoOldMoneyEnd != null ">
+                <![CDATA[  and a.shuiguo_old_money <= #{params.shuiguoOldMoneyEnd}   ]]>
+            </if>
+            <if test="params.shuiguoNewMoneyStart != null ">
+                <![CDATA[  and a.shuiguo_new_money >= #{params.shuiguoNewMoneyStart}   ]]>
+            </if>
+            <if test="params.shuiguoNewMoneyEnd != null ">
+                <![CDATA[  and a.shuiguo_new_money <= #{params.shuiguoNewMoneyEnd}   ]]>
+            </if>
+            <if test="params.shuiguoClicknumStart != null and params.shuiguoClicknumStart != ''">
+                <![CDATA[  and a.shuiguo_clicknum >= #{params.shuiguoClicknumStart}   ]]>
+            </if>
+            <if test="params.shuiguoClicknumEnd != null and params.shuiguoClicknumEnd != ''">
+                <![CDATA[  and a.shuiguo_clicknum <= #{params.shuiguoClicknumEnd}   ]]>
+            </if>
+             <if test="params.shuiguoClicknum != null and params.shuiguoClicknum != ''">
+                and a.shuiguo_clicknum = #{params.shuiguoClicknum}
+             </if>
+            <if test="params.shangxiaTypes != null and params.shangxiaTypes != ''">
+                and a.shangxia_types = #{params.shangxiaTypes}
+            </if>
+            <if test="params.shuiguoDeleteStart != null and params.shuiguoDeleteStart != ''">
+                <![CDATA[  and a.shuiguo_delete >= #{params.shuiguoDeleteStart}   ]]>
+            </if>
+            <if test="params.shuiguoDeleteEnd != null and params.shuiguoDeleteEnd != ''">
+                <![CDATA[  and a.shuiguo_delete <= #{params.shuiguoDeleteEnd}   ]]>
+            </if>
+             <if test="params.shuiguoDelete != null and params.shuiguoDelete != ''">
+                and a.shuiguo_delete = #{params.shuiguoDelete}
+             </if>
+            <if test=" params.shuiguoContent != '' and params.shuiguoContent != null and params.shuiguoContent != 'null' ">
+                and a.shuiguo_content like CONCAT('%',#{params.shuiguoContent},'%')
+            </if>
+
+        </where>
+
+        order by a.${params.orderBy} desc 
+    </select>
+
+</mapper>
